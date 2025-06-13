@@ -16,6 +16,7 @@ License:	BSD (userspace tools), GPL v2 (kernel module)
 Group:		Applications/System
 #Source0Download: https://knem.gitlabpages.inria.fr/download/
 Source0:	https://gitlab.inria.fr/knem/knem/uploads/4a43e3eb860cda2bbd5bf5c7c04a24b6/%{name}-%{version}.tar.gz
+# Source0-md5:	e3baceb9ec21912c227d90804bf96e7a
 URL:		https://knem.gitlabpages.inria.fr/
 BuildRequires:	hwloc-devel >= 1.0
 BuildRequires:	pkgconfig
