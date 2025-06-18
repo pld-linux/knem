@@ -3,7 +3,6 @@
 # - finish knem.rules file and package it (wrong dir, non-existing rdma group)
 #
 # Conditional build:
-%bcond_without	static_libs	# static libraries
 %bcond_with	kernel		# kernel module
 %bcond_without	userspace	# userspace tools
 #
@@ -28,13 +27,24 @@ High-performance intra-node MPI communication for large messages.
 %description -l pl.UTF-8
 Wysokowydajna komunikacja międzywęzłowa MPI dla dużych komunikatów.
 
+%package devel
+Summary:	Header file for KNEM I/O
+Summary(pl.UTF-8):	Plik nagłówkowy we/wy KNEM
+Group:		Development/Libraries
+# doesn't require base
+
+%description devel
+Header file for KNEM I/O.
+
+%description devel -l pl.UTF-8
+Plik nagłówkowy we/wy KNEM.
+
 %prep
 %setup -q
 
 %build
 %configure \
-	--disable-silent-rules \
-	%{!?with_static_libs:--disable-static}
+	--disable-silent-rules
 
 %if %{with kernel}
 %{__make} -C driver/linux
@@ -48,6 +58,10 @@ Wysokowydajna komunikacja międzywęzłowa MPI dla dużych komunikatów.
 rm -rf $RPM_BUILD_ROOT
 
 %if %{with userspace}
+# non-recursive, to skip driver
+%{__make} install-am \
+	DESTDIR=$RPM_BUILD_ROOT
+
 %{__make} -C tools install \
 	DESTDIR=$RPM_BUILD_ROOT
 
@@ -69,4 +83,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/knem_loopback
 %attr(755,root,root) %{_bindir}/knem_pingpong
 %attr(755,root,root) %{_bindir}/knem_region_cost
+
+%files devel
+%defattr(644,root,root,755)
+%{_includedir}/knem_io.h
+%{_pkgconfigdir}/knem.pc
 %endif
